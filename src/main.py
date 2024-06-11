@@ -1,6 +1,7 @@
 import hashlib
 import string
 import random
+import json
 
 def add(a, b):
     return a + b
@@ -31,5 +32,20 @@ def generate_password():
     password = "".join(random.choice(characters) for _ in range(length))
     return password
 
-password1 = generate_password()
-print(password1)
+
+def save_password_hash(username: str, password: str) -> None:
+    """
+    Sauvegarde le hachage SHA256 d'un mot de passe pour un utilisateur donné dans un fichier JSON.
+
+    :param username: le nom d'utilisateur
+    :param password: le mot de passe à hasher
+    """
+    # Hash le mot de passe avec SHA256
+    password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+    # Crée un dictionnaire avec le nom d'utilisateur et le hachage du mot de passe
+    data = {username: password_hash}
+
+    # Écrit le dictionnaire dans un fichier JSON
+    with open("passwords.json", "w") as f:
+        json.dump(data, f)
